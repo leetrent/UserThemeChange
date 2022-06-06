@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -15,7 +17,19 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-	<link href="https://cdn.kendostatic.com/2022.2.510/styles/kendo.default-turquoise.min.css" rel="stylesheet" type="text/css" />
+
+    @{
+        string? themeSelectionFromHttpSession = "default-main";
+        if (Context != null && Context.Session.GetString("_Theme") != null)
+        {
+            themeSelectionFromHttpSession = Context.Session.GetString("_Theme");
+        }
+        string themeHref = $"https://cdn.kendostatic.com/2022.2.510/styles/kendo.{themeSelectionFromHttpSession}.min.css";
+
+        <link href="@themeHref" rel="stylesheet" type="text/css" />
+
+    }
+
 	<script src="https://cdn.kendostatic.com/2022.2.510/js/jquery.min.js"></script>
 	<script src="https://cdn.kendostatic.com/2022.2.510/js/jszip.min.js"></script>
 	<script src="https://cdn.kendostatic.com/2022.2.510/js/kendo.all.min.js"></script>
