@@ -5,6 +5,8 @@ namespace UserThemeChange.Controllers
 {
     public class UserPreferencesController : Controller
     {
+        public const string ThemeSessionKeyName = "_Theme";
+
         public IActionResult Index()
         {
             return View();
@@ -49,6 +51,22 @@ namespace UserThemeChange.Controllers
             cookie.Expires = DateTime.Now.AddMinutes(10);
 
             Response.Cookies.Append("theme", selection, cookie);
+
+            HttpContext.Session.SetString(ThemeSessionKeyName, selection);
+            string? themeSelectionFromHttpSession = "no value";
+                
+            if (HttpContext.Session.GetString(ThemeSessionKeyName) != null)
+            {
+                themeSelectionFromHttpSession = HttpContext.Session.GetString(ThemeSessionKeyName);
+            }
+
+            Console.WriteLine("======================================================================================");
+            Console.WriteLine($"{logSnippet} (local:themeSelectionFromHttpSession): '{themeSelectionFromHttpSession}'");
+            Console.WriteLine("======================================================================================");
+
+
+
+
             var returnUrl = Request.Headers["Referer"].ToString();
             Console.WriteLine($"{logSnippet} (local:returnUrl): '{returnUrl}'");
             Console.WriteLine();
