@@ -3,4 +3,37 @@
 *@
 @{
     <h1>User Preferences Index Page</h1>
+
+@(Html.Kendo().DropDownList()
+                       .Name("themeSelector")
+                       .DataTextField("Name")
+                       .DataValueField("ThemeId")
+                       .OptionLabel("Select Theme")
+                       .Height(300)
+                       .AutoWidth(true)
+                       .DataSource(source =>
+                           {
+                           source.Read(read =>
+                           {
+                                read.Action("GetThemes", "UserPreferences");
+                               });
+                           }).Events(ev => ev.Change("themeSelection"))
+                       .HtmlAttributes(new { style = "float: right" })
+)
+
+<script>
+    function themeSelection(e) {
+        var selectedTheme = e.sender.dataItem();
+        console.log(`[themeSelection] => (selectedTheme.ThemeId): "${selectedTheme.ThemeId}"`);
+
+        $.post({
+            url: "/UserPreferences/SetTheme",
+            data: { selection: selectedTheme.ThemeId },
+            success: function (data) {
+                 console.log(`[themeSelection][success] => (data.url): "${data.url}"`);
+                window.location = data.url;
+            }
+        });
+    };
+</script>
 }
